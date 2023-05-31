@@ -18,9 +18,9 @@ import java.util.ArrayList;
 public class ChessController {
 
 
-    Pane boardPane[][] = ChessApplication.boardPane;
-    Board board = ChessApplication.board;
-    Cell cells[][] = board.getCells();
+    static Pane[][] boardPane = ChessApplication.boardPane;
+    static Board board = ChessApplication.board;
+    static Cell[][] cells = board.getCells();
     Piece curPiece = null;
     Color curTeam = Color.WHITE;
 
@@ -57,7 +57,7 @@ public class ChessController {
             ChessApplication.clearSelection(boardGrid);
         }
     }
-    public void updateBoard() {
+    public static void updateBoard() {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 putPieceInPane(boardPane[i][j], cells[i][j].getPiece());
@@ -125,7 +125,11 @@ public class ChessController {
         curPiece.removeExtra(toMove, board);
         for (Cell itr : toMove) {
             if (!itr.isOccupied())
-                boardPane[itr.getRow()][itr.getCol()].setStyle(ChessApplication.MOVABLE_CELL_STYLE);
+                for (Node node : boardPane[itr.getRow()][itr.getCol()].getChildren()) {
+                    if (node instanceof ImageView) {
+                        ((ImageView) node).setImage(ChessApplication.dot);
+                    }
+                }
         }
         toMove = curPiece.getCellsToAttack(board);
         curPiece.removeExtra(toMove, board);
@@ -135,7 +139,7 @@ public class ChessController {
         }
     }
 
-    public void removePieceFromPane(Pane pane) {
+    public static void removePieceFromPane(Pane pane) {
         Image image = null;
         Rectangle rectangle = null;
         for (Node node : pane.getChildren()) {
@@ -150,7 +154,7 @@ public class ChessController {
         pane.getChildren().removeAll(rectangle);
     }
 
-    public void putPieceInPane(Pane pane, Piece piece) {
+    public static void putPieceInPane(Pane pane, Piece piece) {
         removePieceFromPane(pane);
         if (piece == null) return;
         for (Node node : pane.getChildren()) {

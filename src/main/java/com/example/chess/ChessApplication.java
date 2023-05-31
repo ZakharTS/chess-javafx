@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -29,9 +30,11 @@ public class ChessApplication extends Application {
 
     static Label whiteLabel = null;
     static Label blackLabel = null;
+    static Image dot = null;
 
     @Override
     public void start(Stage stage) throws IOException, InterruptedException {
+        dot = new Image(ChessApplication.class.getResourceAsStream("dot.png"));
         stage.setTitle("Chess game");
         primaryStage = stage;
 
@@ -105,5 +108,6 @@ public class ChessApplication extends Application {
                 node.setStyle(ChessApplication.BLACK_CELL_STYLE);
             }
         }
+        ChessController.updateBoard();
     }
 }
