@@ -19,7 +19,6 @@ public class AiPlayer {
             cellsAvailable.stream().forEach(cell -> moves.add(new Move(itr, cell)));
         }
         moves.stream().filter(move -> !move.getPiece().getCell().equals(move.getCellToMove()));
-
         Move currentMove = moves.get(new Random().nextInt(moves.size()));
         while (!currentMove.getPiece().moveTo(currentMove.getCellToMove(), board)) {
             currentMove = moves.get(new Random().nextInt(moves.size()));

@@ -80,44 +80,51 @@ public class ChessController {
         }
     }
 
+    public void performAiMove() {
+        if (curGameMode.equals(GameMode.ONE_PLAYER) && curTeam.equals(aiPlayer.getTeam())) {
+            aiPlayer.performMove(board);
+            onMoveUpdate();
+        }
+    }
+
     public void statusHandler(GameStatus status) {
         switch (status) {
             case BLACKS_MOVE -> {
                 ChessApplication.whiteLabel.setVisible(false);
                 ChessApplication.blackLabel.setText(blackMoveText);
                 ChessApplication.blackLabel.setVisible(true);
+                performAiMove();
             }
             case WHITES_MOVE -> {
                 ChessApplication.blackLabel.setVisible(false);
                 ChessApplication.whiteLabel.setText(whiteMoveText);
                 ChessApplication.whiteLabel.setVisible(true);
+                performAiMove();
             }
             case DRAW -> putLabelInCenter(ChessApplication.rootLayout, "DRAW");
             case BLACK_CHECK ->{
                 ChessApplication.whiteLabel.setVisible(false);
                 ChessApplication.blackLabel.setText("CHECK!");
                 ChessApplication.blackLabel.setVisible(true);
+                performAiMove();
             }
             case WHITE_CHECK -> {
                 ChessApplication.blackLabel.setVisible(false);
                 ChessApplication.whiteLabel.setText("CHECK!");
                 ChessApplication.whiteLabel.setVisible(true);
+                performAiMove();
             }
             case BLACK_CHECK_AND_MATE -> {
-                putLabelInCenter(ChessApplication.rootLayout, blackWinsText);
+                putLabelInCenter(ChessApplication.rootLayout, whiteWinsText);
                 ChessApplication.whiteLabel.setVisible(false);
                 ChessApplication.blackLabel.setVisible(false);
 
             }
             case WHITE_CHECK_AND_MATE -> {
-                putLabelInCenter(ChessApplication.rootLayout, whiteWinsText);
+                putLabelInCenter(ChessApplication.rootLayout, blackWinsText);
                 ChessApplication.whiteLabel.setVisible(false);
                 ChessApplication.blackLabel.setVisible(false);
             }
-        }
-        if (curGameMode.equals(GameMode.ONE_PLAYER) && curTeam.equals(aiPlayer.getTeam())) {
-            aiPlayer.performMove(board);
-            onMoveUpdate();
         }
     }
     public static void putLabelInCenter(BorderPane borderPane, String text) {
