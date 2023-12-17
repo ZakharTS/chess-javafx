@@ -3,23 +3,26 @@ package com.example.chess.figures;
 import java.util.ArrayList;
 
 public class Cell {
-    private int col;
-    private int row;
+    private final int col;
+    private final int row;
     private Piece piece;
+
     public Cell() {
         this(0, 0);
     }
+
     public Cell(int row, int col) {
-        if(!verifyPos(row)) {
+        if (!verifyPos(row)) {
             row = 0;
         }
-        if(!verifyPos(col)) {
+        if (!verifyPos(col)) {
             col = 0;
         }
         this.row = row;
         this.col = col;
         piece = null;
     }
+
     public static boolean verifyPos(int pos) {
         return (pos >= 0 && pos <= 7);
     }
@@ -28,7 +31,7 @@ public class Cell {
         ArrayList<Piece> pieces = board.getPiecesByTeam(team);
         for (Piece itr : pieces) {
             if (itr instanceof King) { // avoid recursion (да, костыль)
-                Cell cells[][] = board.getCells();
+                Cell[][] cells = board.getCells();
                 int curRow = itr.cell.getRow();
                 int curCol = itr.cell.getCol();
                 for (int i = curRow - 1; i <= curRow + 1; i++) {
@@ -49,16 +52,8 @@ public class Cell {
         return row;
     }
 
-    public void setRow(int row) {
-        this.row = row;
-    }
-
     public int getCol() {
         return col;
-    }
-
-    public void setY(int y) {
-        this.col = col;
     }
 
     public Piece getPiece() {
@@ -68,14 +63,14 @@ public class Cell {
     public void setPiece(Piece piece) {
         this.piece = piece;
     }
+
     public boolean isOccupied() {
         return piece != null;
     }
+
     public boolean isOccupiedBy(Color team) {
         if (this.isOccupied()) {
-            if (this.piece.getTeam() == team) {
-                return true;
-            }
+            return this.piece.getTeam() == team;
         }
         return false;
     }

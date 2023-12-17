@@ -16,16 +16,16 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class ChessApplication extends Application {
     static Stage primaryStage;
     static BorderPane rootLayout;
     static Board board;
-    static Pane boardPane[][];
+    static Pane[][] boardPane;
     static String WHITE_CELL_STYLE = "-fx-background-color: rgb(255,255,255);";
     static String BLACK_CELL_STYLE = "-fx-background-color: rgb(136, 184, 140);";
     static String SELECTED_CELL_STYLE = "-fx-background-color: rgb(232, 229, 132);";
-    static String MOVABLE_CELL_STYLE = "-fx-background-color: rgb(232, 230, 169);";
     static String ATTACK_CELL_STYLE = "-fx-background-color: rgb(219, 127, 127);";
 
     static Label whiteLabel = null;
@@ -33,14 +33,14 @@ public class ChessApplication extends Application {
     static Image dot = null;
 
     @Override
-    public void start(Stage stage) throws IOException, InterruptedException {
-        dot = new Image(ChessApplication.class.getResourceAsStream("dot.png"));
+    public void start(Stage stage) throws IOException {
+        dot = new Image(Objects.requireNonNull(ChessApplication.class.getResourceAsStream("dot.png")));
         stage.setTitle("Chess game");
         primaryStage = stage;
 
         initRootLayout();
         board = new Board();
-        Cell cells[][] = board.getCells();
+        Cell[][] cells = board.getCells();
         boardPane = new Pane[8][8];
         FXMLLoader fxmlLoader = new FXMLLoader(ChessApplication.class.getResource("chess-view.fxml"));
         GridPane boardGrid = fxmlLoader.load();
@@ -61,20 +61,14 @@ public class ChessApplication extends Application {
                         new ImageView(cells[row][col].getPiece().getImage()) : new ImageView();
                 imageView.setFitHeight(60);
                 imageView.setFitWidth(60);
-                if (node instanceof Pane){
-                    ((Pane)node).getChildren().add(imageView);
-                }
-            } else {
-                if (node instanceof Pane){
-                    ((Pane)node).getChildren().add(new ImageView());
-                }
+                ((Pane) node).getChildren().add(imageView);
             }
         }
         clearSelection(boardGrid);
         rootLayout.setCenter(boardGrid);
     }
 
-    public void initRootLayout() throws IOException, InterruptedException {
+    public void initRootLayout() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(ChessApplication.class.getResource("root-layout-view.fxml"));
         rootLayout = fxmlLoader.load();
         primaryStage.setScene(new Scene(rootLayout));

@@ -4,22 +4,23 @@ import com.example.chess.ChessApplication;
 import javafx.scene.image.Image;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Queen extends Piece{
     public Queen(Color team, Cell cell) {
         super(team, cell);
         if (this.team == Color.WHITE) {
-            image = new Image(ChessApplication.class.getResourceAsStream("wqueen.png"));
+            image = new Image(Objects.requireNonNull(ChessApplication.class.getResourceAsStream("wqueen.png")));
 
         } else {
-            image = new Image(ChessApplication.class.getResourceAsStream("bqueen.png"));
+            image = new Image(Objects.requireNonNull(ChessApplication.class.getResourceAsStream("bqueen.png")));
         }
     }
 
     @Override
     public ArrayList<Cell> getCellsToMove(Board board) {
         ArrayList<Cell> cellsToMove = new ArrayList<>();
-        Cell cells[][] = board.getCells();
+        Cell[][] cells = board.getCells();
         Cell curCell = this.getCell();
         int curRow = curCell.getRow();
         int curCol = curCell.getCol();

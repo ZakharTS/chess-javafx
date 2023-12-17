@@ -1,7 +1,6 @@
 package com.example.chess.figures;
 
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -31,7 +30,7 @@ public abstract class Piece {
     public abstract ArrayList<Cell> getCellsToAttack(Board board);
 
     public boolean verifyMove(Cell dest, Board board) {
-        if (!this.tryMove(dest, board)) {
+        if (this.tryMove(dest, board)) {
             return false;
         }
         if (dest.isOccupied()) {
@@ -43,7 +42,7 @@ public abstract class Piece {
 
     public boolean tryMove(Cell dest, Board board) {
         if (dest.isOccupiedBy(this.team)) {
-            return false;
+            return true;
         }
         // trying new layout
         Cell oldCell = this.cell;
@@ -59,15 +58,15 @@ public abstract class Piece {
 
         oldCell.setPiece(this);
         this.cell = oldCell;
-        return !isCheck;
+        return isCheck;
     }
 
     public void removeExtra(ArrayList<Cell> cellsToMove, Board board) {
-        Iterator itr = cellsToMove.iterator();
+        Iterator<Cell> itr = cellsToMove.iterator();
         while (itr.hasNext()) {
-            Object current = itr.next();
-            if (current instanceof Cell) {
-                if (!this.tryMove((Cell) current, board)) {
+            Cell current = itr.next();
+            if (current != null) {
+                if (this.tryMove(current, board)) {
                     itr.remove();
                 }
             }
@@ -76,10 +75,6 @@ public abstract class Piece {
 
     public Color getTeam() {
         return team;
-    }
-
-    public void setTeam(Color team) {
-        this.team = team;
     }
 
     public Cell getCell() {
@@ -94,7 +89,4 @@ public abstract class Piece {
         return image;
     }
 
-    public void setImage(Image image) {
-        this.image = image;
-    }
 }

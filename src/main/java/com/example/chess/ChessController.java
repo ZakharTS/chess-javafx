@@ -41,8 +41,6 @@ public class ChessController {
             return;
         }
 
-        int oldRow = curPiece.getCell().getRow();
-        int oldCol = curPiece.getCell().getCol();
         if (curPiece.moveTo(cells[row][col], board)) {
             // pieces on board update, change team;
             updateBoard();
@@ -65,7 +63,7 @@ public class ChessController {
         }
     }
 
-    public static void statusHandler(GameStatus status) {
+    private static void statusHandler(GameStatus status) {
         switch (status) {
             case BLACKS_MOVE -> {
                 ChessApplication.whiteLabel.setVisible(false);
@@ -77,9 +75,7 @@ public class ChessController {
                 ChessApplication.whiteLabel.setText("White's move");
                 ChessApplication.whiteLabel.setVisible(true);
             }
-            case DRAW -> {
-                putLabelInCenter(ChessApplication.rootLayout, "DRAW");
-            }
+            case DRAW -> putLabelInCenter(ChessApplication.rootLayout, "DRAW");
             case BLACK_CHECK ->{
                 ChessApplication.whiteLabel.setVisible(false);
                 ChessApplication.blackLabel.setText("CHECK!");
@@ -109,11 +105,6 @@ public class ChessController {
         borderPane.setCenter(new StackPane(label));
     }
 
-    public void clearRootLayout() {
-        ChessApplication.rootLayout.setBottom(null);
-        ChessApplication.rootLayout.setTop(null);
-    }
-
     public void select(int row, int col) {
         if (!cells[row][col].isOccupied()) return;
         if (cells[row][col].getPiece().getTeam() != curTeam) {
@@ -140,11 +131,9 @@ public class ChessController {
     }
 
     public static void removePieceFromPane(Pane pane) {
-        Image image = null;
         Rectangle rectangle = null;
         for (Node node : pane.getChildren()) {
             if (node instanceof ImageView) {
-                image = ((ImageView) node).getImage();
                 ((ImageView) node).setImage(null);
             }
             if (node instanceof Rectangle) {
@@ -154,7 +143,7 @@ public class ChessController {
         pane.getChildren().removeAll(rectangle);
     }
 
-    public static void putPieceInPane(Pane pane, Piece piece) {
+    private static void putPieceInPane(Pane pane, Piece piece) {
         removePieceFromPane(pane);
         if (piece == null) return;
         for (Node node : pane.getChildren()) {

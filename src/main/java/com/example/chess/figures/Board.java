@@ -1,13 +1,11 @@
 package com.example.chess.figures;
 
-import com.example.chess.ChessApplication;
-
 import java.util.ArrayList;
 
 public class Board {
-    private Cell cells[][];
-    private King whiteKing;
-    private King blackKing;
+    private final Cell[][] cells;
+    private final King whiteKing;
+    private final King blackKing;
     private GameStatus currentStatus;
     public Board() {
         // board init
@@ -99,16 +97,5 @@ public class Board {
             }
         }
         return piecesOfTeam;
-    }
-    public ArrayList<Cell> getCellsByTeam(Color team) {
-        ArrayList<Cell> cellsOfTeam = new ArrayList<>();
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                if (cells[i][j].getPiece().getTeam() == team) {
-                    cellsOfTeam.add(cells[i][j]);
-                }
-            }
-        }
-        return cellsOfTeam;
     }
 }

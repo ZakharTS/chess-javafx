@@ -4,20 +4,23 @@ import com.example.chess.ChessApplication;
 import javafx.scene.image.Image;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
-public class Rook extends Piece{
+public class Rook extends Piece {
+
     private boolean isMoved;
 
     public Rook(Color team, Cell cell) {
         super(team, cell);
         isMoved = false;
         if (this.team == Color.WHITE) {
-            image = new Image(ChessApplication.class.getResourceAsStream("wrook.png"));
+            image = new Image(Objects.requireNonNull(ChessApplication.class.getResourceAsStream("wrook.png")));
 
         } else {
-            image = new Image(ChessApplication.class.getResourceAsStream("brook.png"));
+            image = new Image(Objects.requireNonNull(ChessApplication.class.getResourceAsStream("brook.png")));
         }
     }
+
     @Override
     public boolean moveTo(Cell dest, Board board) {
         if (this.verifyMove(dest, board)) {
@@ -33,7 +36,7 @@ public class Rook extends Piece{
     @Override
     public ArrayList<Cell> getCellsToMove(Board board) {
         ArrayList<Cell> cellsToMove = new ArrayList<>();
-        Cell cells[][] = board.getCells();
+        Cell[][] cells = board.getCells();
         Cell curCell = this.getCell();
         int curRow = curCell.getRow();
         int curCol = curCell.getCol();
@@ -67,7 +70,4 @@ public class Rook extends Piece{
         return isMoved;
     }
 
-    public void setMoved(boolean moved) {
-        isMoved = moved;
-    }
 }

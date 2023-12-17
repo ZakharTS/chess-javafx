@@ -4,6 +4,7 @@ import com.example.chess.ChessApplication;
 import javafx.scene.image.Image;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class King extends Piece {
     private boolean isMoved;
@@ -11,10 +12,10 @@ public class King extends Piece {
         super(team, cell);
         isMoved = false;
         if (this.team == Color.WHITE) {
-            image = new Image(ChessApplication.class.getResourceAsStream("wking.png"));
+            image = new Image(Objects.requireNonNull(ChessApplication.class.getResourceAsStream("wking.png")));
 
         } else {
-            image = new Image(ChessApplication.class.getResourceAsStream("bking.png"));
+            image = new Image(Objects.requireNonNull(ChessApplication.class.getResourceAsStream("bking.png")));
         }
     }
     @Override
@@ -22,17 +23,17 @@ public class King extends Piece {
         if (this.verifyMove(dest, board)) {
             isMoved = true;
             if (dest.getCol() - this.getCell().getCol() == 2) { // caslting
-                Cell cells[][] = board.getCells();
+                Cell[][] cells = board.getCells();
                 Piece rook = cells[dest.getRow()][dest.getCol() + 1].getPiece();
                 if (!(rook instanceof Rook)) return false;
-                if (!((Rook) rook).moveTo(cells[dest.getRow()][dest.getCol() - 1], board)) {
+                if (!(rook).moveTo(cells[dest.getRow()][dest.getCol() - 1], board)) {
                     return false;
                 }
             } else if (dest.getCol() - this.getCell().getCol() == -2) { // castling
-                Cell cells[][] = board.getCells();
+                Cell[][] cells = board.getCells();
                 Piece rook = cells[dest.getRow()][dest.getCol() - 2].getPiece();
                 if (!(rook instanceof Rook)) return false;
-                if (!((Rook) rook).moveTo(cells[dest.getRow()][dest.getCol() + 1], board)) {
+                if (!(rook).moveTo(cells[dest.getRow()][dest.getCol() + 1], board)) {
                     return false;
                 }
             }
@@ -47,7 +48,7 @@ public class King extends Piece {
     @Override
     public ArrayList<Cell> getCellsToMove(Board board) {
         ArrayList<Cell> cellsToMove = getCellsToAttack(board);
-        Cell cells[][] = board.getCells();
+        Cell[][] cells = board.getCells();
         Cell curCell = this.getCell();
         int row = curCell.getRow();
         int col = curCell.getCol();
@@ -86,7 +87,7 @@ public class King extends Piece {
     @Override
     public ArrayList<Cell> getCellsToAttack(Board board) {
         ArrayList<Cell> cellsToMove = new ArrayList<>();
-        Cell cells[][] = board.getCells();
+        Cell[][] cells = board.getCells();
         Cell curCell = this.getCell();
         int row = curCell.getRow();
         int col = curCell.getCol();
@@ -103,7 +104,4 @@ public class King extends Piece {
         return cellsToMove;
     }
 
-    public boolean isMoved() {
-        return isMoved;
-    }
 }
