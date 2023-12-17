@@ -1,5 +1,7 @@
 package com.example.chess.figures;
 
+import com.example.chess.board.Board;
+import com.example.chess.board.Cell;
 import com.example.chess.ChessApplication;
 import javafx.scene.image.Image;
 

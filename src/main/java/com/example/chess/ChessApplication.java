@@ -1,7 +1,8 @@
 package com.example.chess;
 
-import com.example.chess.figures.Board;
-import com.example.chess.figures.Cell;
+import com.example.chess.board.Board;
+import com.example.chess.board.Cell;
+import com.example.chess.figures.Color;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -27,9 +28,12 @@ public class ChessApplication extends Application {
     static String BLACK_CELL_STYLE = "-fx-background-color: rgb(136, 184, 140);";
     static String SELECTED_CELL_STYLE = "-fx-background-color: rgb(232, 229, 132);";
     static String ATTACK_CELL_STYLE = "-fx-background-color: rgb(219, 127, 127);";
-
     static Label whiteLabel = null;
     static Label blackLabel = null;
+    static String whiteMoveText = "White's move";
+    static String blackMoveText = "Black's move";
+    static String whiteWinsText = "WHITE WINS!";
+    static String blackWinsText = "BLACK WINS!";
     static Image dot = null;
 
     @Override
@@ -38,12 +42,31 @@ public class ChessApplication extends Application {
         stage.setTitle("Chess game");
         primaryStage = stage;
 
-        initRootLayout();
         board = new Board();
         Cell[][] cells = board.getCells();
         boardPane = new Pane[8][8];
         FXMLLoader fxmlLoader = new FXMLLoader(ChessApplication.class.getResource("chess-view.fxml"));
         GridPane boardGrid = fxmlLoader.load();
+        ChessController chessController = fxmlLoader.getController();
+        chessController.openDialog();
+        if (chessController.getCurGameMode().equals(GameMode.ONE_PLAYER)) {
+            if (Math.random() < 0.5) {
+                whiteMoveText = "Player's move";
+                blackMoveText = "AI's move";
+                whiteWinsText = "PLAYER WINS!";
+                blackWinsText = "AI WINS!";
+                chessController.setRealPlayerTeam(Color.WHITE);
+                chessController.setAiPlayer(new AiPlayer(Color.BLACK));
+            } else {
+                whiteMoveText = "AI's move";
+                blackMoveText = "Player's move";
+                whiteWinsText = "AI WINS!";
+                blackWinsText = "PLAYER WINS!";
+                chessController.setRealPlayerTeam(Color.BLACK);
+                chessController.setAiPlayer(new AiPlayer(Color.WHITE));
+            }
+        }
+        initRootLayout();
         for (Node node : boardGrid.getChildren()) {
             Integer rowObj = GridPane.getRowIndex(node);
             Integer colObj = GridPane.getColumnIndex(node);
@@ -66,6 +89,9 @@ public class ChessApplication extends Application {
         }
         clearSelection(boardGrid);
         rootLayout.setCenter(boardGrid);
+        if (chessController.getCurGameMode().equals(GameMode.ONE_PLAYER)) {
+            chessController.statusHandler(board.getCurrentStatus());
+        }
     }
 
     public void initRootLayout() throws IOException {
@@ -74,11 +100,11 @@ public class ChessApplication extends Application {
         primaryStage.setScene(new Scene(rootLayout));
         primaryStage.show();
 
-        whiteLabel = new Label("White's move");
+        whiteLabel = new Label(whiteMoveText);
         whiteLabel.setStyle("-fx-font-size: 72px");
         rootLayout.setBottom(new StackPane(whiteLabel));
 
-        blackLabel = new Label("Black's move");
+        blackLabel = new Label(blackMoveText);
         blackLabel.setStyle("-fx-font-size: 72px");
         blackLabel.setVisible(false);
         rootLayout.setTop(new StackPane(blackLabel));

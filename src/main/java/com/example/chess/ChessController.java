@@ -1,8 +1,14 @@
 package com.example.chess;
 
+import com.example.chess.board.Board;
+import com.example.chess.board.Cell;
+import com.example.chess.board.GameStatus;
 import com.example.chess.figures.*;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -12,17 +18,25 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.ArrayList;
+
+import static com.example.chess.ChessApplication.*;
 
 public class ChessController {
 
 
-    static Pane[][] boardPane = ChessApplication.boardPane;
-    static Board board = ChessApplication.board;
-    static Cell[][] cells = board.getCells();
-    Piece curPiece = null;
-    Color curTeam = Color.WHITE;
+    static private Pane[][] boardPane = ChessApplication.boardPane;
+    static private Board board = ChessApplication.board;
+    private AiPlayer aiPlayer;
+    static private Cell[][] cells = board.getCells();
+    private Piece curPiece = null;
+    private Color curTeam = Color.WHITE;
+    private Color realPlayerTeam = null;
+    private GameMode curGameMode = null;
 
     @FXML
     public GridPane boardGrid;
@@ -42,18 +56,21 @@ public class ChessController {
         }
 
         if (curPiece.moveTo(cells[row][col], board)) {
-            // pieces on board update, change team;
-            updateBoard();
-            ChessApplication.clearSelection(boardGrid);
-            curPiece = null;
-            curTeam = curTeam.opposite();
-            // status update
-            board.updateCurrentStatus(curTeam);
-            statusHandler(board.getCurrentStatus());
+            onMoveUpdate();
         } else {
             curPiece = null;
             ChessApplication.clearSelection(boardGrid);
         }
+    }
+    private void onMoveUpdate() {
+        // pieces on board update, change team;
+        updateBoard();
+        ChessApplication.clearSelection(boardGrid);
+        curPiece = null;
+        curTeam = curTeam.opposite();
+        // status update
+        board.updateCurrentStatus(curTeam);
+        statusHandler(board.getCurrentStatus());
     }
     public static void updateBoard() {
         for (int i = 0; i < 8; i++) {
@@ -63,16 +80,16 @@ public class ChessController {
         }
     }
 
-    private static void statusHandler(GameStatus status) {
+    public void statusHandler(GameStatus status) {
         switch (status) {
             case BLACKS_MOVE -> {
                 ChessApplication.whiteLabel.setVisible(false);
-                ChessApplication.blackLabel.setText("Black's move");
+                ChessApplication.blackLabel.setText(blackMoveText);
                 ChessApplication.blackLabel.setVisible(true);
             }
             case WHITES_MOVE -> {
                 ChessApplication.blackLabel.setVisible(false);
-                ChessApplication.whiteLabel.setText("White's move");
+                ChessApplication.whiteLabel.setText(whiteMoveText);
                 ChessApplication.whiteLabel.setVisible(true);
             }
             case DRAW -> putLabelInCenter(ChessApplication.rootLayout, "DRAW");
@@ -87,16 +104,20 @@ public class ChessController {
                 ChessApplication.whiteLabel.setVisible(true);
             }
             case BLACK_CHECK_AND_MATE -> {
-                putLabelInCenter(ChessApplication.rootLayout, "WHITE WINS!");
+                putLabelInCenter(ChessApplication.rootLayout, blackWinsText);
                 ChessApplication.whiteLabel.setVisible(false);
                 ChessApplication.blackLabel.setVisible(false);
 
             }
             case WHITE_CHECK_AND_MATE -> {
-                putLabelInCenter(ChessApplication.rootLayout, "BLACK WINS!");
+                putLabelInCenter(ChessApplication.rootLayout, whiteWinsText);
                 ChessApplication.whiteLabel.setVisible(false);
                 ChessApplication.blackLabel.setVisible(false);
             }
+        }
+        if (curGameMode.equals(GameMode.ONE_PLAYER) && curTeam.equals(aiPlayer.getTeam())) {
+            aiPlayer.performMove(board);
+            onMoveUpdate();
         }
     }
     public static void putLabelInCenter(BorderPane borderPane, String text) {
@@ -154,4 +175,40 @@ public class ChessController {
         }
     }
 
+    void openDialog() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("choose-mode-view.fxml"));
+        Parent parent = fxmlLoader.load();
+        ChooseModeController dialogController = fxmlLoader.getController();
+
+        Scene scene = new Scene(parent, 300, 200);
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(scene);
+        stage.showAndWait();
+        curGameMode = dialogController.getMode();
+    }
+
+    public Color getRealPlayerTeam() {
+        return realPlayerTeam;
+    }
+
+    public void setRealPlayerTeam(Color realPlayerTeam) {
+        this.realPlayerTeam = realPlayerTeam;
+    }
+
+    public GameMode getCurGameMode() {
+        return curGameMode;
+    }
+
+    public void setCurGameMode(GameMode curGameMode) {
+        this.curGameMode = curGameMode;
+    }
+
+    public AiPlayer getAiPlayer() {
+        return aiPlayer;
+    }
+
+    public void setAiPlayer(AiPlayer aiPlayer) {
+        this.aiPlayer = aiPlayer;
+    }
 }

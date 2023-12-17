@@ -1,6 +1,11 @@
-package com.example.chess.figures;
+package com.example.chess.board;
+
+import com.example.chess.figures.Color;
+import com.example.chess.figures.King;
+import com.example.chess.figures.Piece;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Cell {
     private final int col;
@@ -32,8 +37,8 @@ public class Cell {
         for (Piece itr : pieces) {
             if (itr instanceof King) { // avoid recursion (да, костыль)
                 Cell[][] cells = board.getCells();
-                int curRow = itr.cell.getRow();
-                int curCol = itr.cell.getCol();
+                int curRow = itr.getCell().getRow();
+                int curCol = itr.getCell().getCol();
                 for (int i = curRow - 1; i <= curRow + 1; i++) {
                     for (int j = curCol - 1; j <= curCol + 1; j++) {
                         if (!Cell.verifyPos(i) || !Cell.verifyPos(j)) continue;
@@ -73,5 +78,18 @@ public class Cell {
             return this.piece.getTeam() == team;
         }
         return false;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Cell cell = (Cell) o;
+        return col == cell.col && row == cell.row;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(col, row, piece);
     }
 }

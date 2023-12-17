@@ -1,4 +1,4 @@
-package com.example.chess.figures;
+package com.example.chess.board;
 
 public enum GameStatus {
     WHITES_MOVE,

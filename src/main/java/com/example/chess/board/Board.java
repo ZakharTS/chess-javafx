@@ -1,4 +1,6 @@
-package com.example.chess.figures;
+package com.example.chess.board;
+
+import com.example.chess.figures.*;
 
 import java.util.ArrayList;
 
@@ -8,6 +10,7 @@ public class Board {
     private final King blackKing;
     private GameStatus currentStatus;
     public Board() {
+        currentStatus = GameStatus.WHITES_MOVE;
         // board init
         cells = new Cell[8][8];
         for (int i = 0; i < 8; i++) {
