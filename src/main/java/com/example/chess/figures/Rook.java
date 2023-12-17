@@ -14,6 +14,7 @@ public class Rook extends Piece {
 
     public Rook(Color team, Cell cell) {
         super(team, cell);
+        value = 50;
         isMoved = false;
         if (this.team == Color.WHITE) {
             image = new Image(Objects.requireNonNull(ChessApplication.class.getResourceAsStream("wrook.png")));
@@ -27,9 +28,7 @@ public class Rook extends Piece {
     public boolean moveTo(Cell dest, Board board) {
         if (this.verifyMove(dest, board)) {
             isMoved = true;
-            this.cell.setPiece(null);
-            dest.setPiece(this);
-            this.cell = dest;
+            moveTo(dest);
             return true;
         }
         return false;

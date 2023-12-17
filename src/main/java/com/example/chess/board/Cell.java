@@ -6,11 +6,13 @@ import com.example.chess.figures.Piece;
 
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Stack;
 
 public class Cell {
     private final int col;
     private final int row;
     private Piece piece;
+    private Stack<Piece> oldPieces;
 
     public Cell() {
         this(0, 0);
@@ -26,6 +28,7 @@ public class Cell {
         this.row = row;
         this.col = col;
         piece = null;
+        oldPieces = new Stack<>();
     }
 
     public static boolean verifyPos(int pos) {
@@ -92,4 +95,9 @@ public class Cell {
     public int hashCode() {
         return Objects.hash(col, row, piece);
     }
+
+    public Stack<Piece> getOldPieces() {
+        return oldPieces;
+    }
+
 }

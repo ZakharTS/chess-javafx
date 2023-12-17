@@ -12,6 +12,7 @@ public class King extends Piece {
     private boolean isMoved;
     public King(Color team, Cell cell) {
         super(team, cell);
+        value = 900;
         isMoved = false;
         if (this.team == Color.WHITE) {
             image = new Image(Objects.requireNonNull(ChessApplication.class.getResourceAsStream("wking.png")));
@@ -39,9 +40,7 @@ public class King extends Piece {
                     return false;
                 }
             }
-            this.cell.setPiece(null);
-            dest.setPiece(this);
-            this.cell = dest;
+            moveTo(dest);
             return true;
         }
         return false;

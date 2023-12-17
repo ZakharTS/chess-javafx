@@ -11,6 +11,7 @@ import java.util.Objects;
 public class Pawn extends Piece {
     public Pawn(Color team, Cell cell) {
         super(team, cell);
+        value = 10;
         if (this.team == Color.WHITE) {
             image = new Image(Objects.requireNonNull(ChessApplication.class.getResourceAsStream("wpawn.png")));
 
@@ -22,15 +23,9 @@ public class Pawn extends Piece {
     @Override
     public boolean moveTo(Cell dest, Board board) {
         if (this.verifyMove(dest, board)) {
-            this.cell.setPiece(null);
-            dest.setPiece(this);
-            this.cell = dest;
-            if ((this.team == Color.WHITE && dest.getRow() == 7) || (this.team == Color.BLACK && dest.getRow() == 0)) {
+            moveTo(dest);
+            if ((this.team == Color.WHITE && this.cell.getRow() == 7) || (this.team == Color.BLACK && this.cell.getRow() == 0)) {
                 dest.setPiece(new Queen(this.team, dest));
-
-                this.cell = null;
-                this.team = null;
-                this.image = null;
             }
             return true;
         }

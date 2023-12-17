@@ -12,6 +12,7 @@ public class Bishop extends Piece {
 
     public Bishop(Color team, Cell cell) {
         super(team, cell);
+        value = 30;
         if (this.team == Color.WHITE) {
             image = new Image(Objects.requireNonNull(ChessApplication.class.getResourceAsStream("wbishop.png")));
 

@@ -3,6 +3,8 @@ package com.example.chess.board;
 import com.example.chess.figures.*;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Board {
     private final Cell[][] cells;
@@ -100,5 +102,17 @@ public class Board {
             }
         }
         return piecesOfTeam;
+    }
+
+    public int getBoardValue() {
+        AtomicInteger value = new AtomicInteger();
+
+        List<Piece> pieces = getPiecesByTeam(Color.WHITE);
+        pieces.forEach(itr -> value.addAndGet(itr.getValue()));
+
+        pieces = getPiecesByTeam(Color.BLACK);
+        pieces.forEach(itr -> value.addAndGet(-itr.getValue()));
+
+        return value.get();
     }
 }

@@ -11,6 +11,7 @@ import java.util.Objects;
 public class Queen extends Piece{
     public Queen(Color team, Cell cell) {
         super(team, cell);
+        value = 90;
         if (this.team == Color.WHITE) {
             image = new Image(Objects.requireNonNull(ChessApplication.class.getResourceAsStream("wqueen.png")));
 
