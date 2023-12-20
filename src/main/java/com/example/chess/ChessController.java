@@ -80,7 +80,7 @@ public class ChessController {
         }
     }
 
-    public void performAiMove() {
+    public void performAiMove(MouseEvent event) {
         if (curGameMode.equals(GameMode.ONE_PLAYER) && curTeam.equals(aiPlayer.getTeam())) {
             aiPlayer.performMove(board);
             onMoveUpdate();
@@ -93,32 +93,31 @@ public class ChessController {
                 ChessApplication.whiteLabel.setVisible(false);
                 ChessApplication.blackLabel.setText(blackMoveText);
                 ChessApplication.blackLabel.setVisible(true);
-                performAiMove();
+                performAiMove(null);
             }
             case WHITES_MOVE -> {
                 ChessApplication.blackLabel.setVisible(false);
                 ChessApplication.whiteLabel.setText(whiteMoveText);
                 ChessApplication.whiteLabel.setVisible(true);
-                performAiMove();
+                performAiMove(null);
             }
             case DRAW -> putLabelInCenter(ChessApplication.rootLayout, "DRAW");
             case BLACK_CHECK ->{
                 ChessApplication.whiteLabel.setVisible(false);
                 ChessApplication.blackLabel.setText("CHECK!");
                 ChessApplication.blackLabel.setVisible(true);
-                performAiMove();
+                performAiMove(null);
             }
             case WHITE_CHECK -> {
                 ChessApplication.blackLabel.setVisible(false);
                 ChessApplication.whiteLabel.setText("CHECK!");
                 ChessApplication.whiteLabel.setVisible(true);
-                performAiMove();
+                performAiMove(null);
             }
             case BLACK_CHECK_AND_MATE -> {
                 putLabelInCenter(ChessApplication.rootLayout, whiteWinsText);
                 ChessApplication.whiteLabel.setVisible(false);
                 ChessApplication.blackLabel.setVisible(false);
-
             }
             case WHITE_CHECK_AND_MATE -> {
                 putLabelInCenter(ChessApplication.rootLayout, blackWinsText);

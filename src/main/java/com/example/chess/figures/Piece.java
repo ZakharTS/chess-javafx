@@ -41,7 +41,6 @@ public abstract class Piece {
     public boolean moveTo(Cell dest, Board board) {
         if (this.verifyMove(dest, board)) {
             moveTo(dest);
-
             return true;
         }
         return false;

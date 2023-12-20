@@ -11,7 +11,7 @@
     <children>
         <VBox alignment="CENTER" layoutX="131.0" layoutY="50.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
             <children>
-                <HBox alignment="CENTER_RIGHT">
+                <VBox alignment="CENTER">
                     <children>
                         <Button mnemonicParsing="false" onAction="#setOnePlayerMode" text="1 player" />
                         <Button mnemonicParsing="false" onAction="#setTwoPlayerMode" text="2 players" />
@@ -22,7 +22,7 @@
                     <padding>
                         <Insets right="30.0" />
                     </padding>
-                </HBox>
+                </VBox>
             </children>
         </VBox>
     </children>

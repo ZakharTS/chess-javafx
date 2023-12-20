@@ -16,14 +16,14 @@ public class AiPlayer {
         int bestValue = -9999;
         for (Move itr : moves) {
             itr.getPiece().moveTo(itr.getCellToMove(), board);
-            int currentValue = minimax(2, board, team.equals(Color.BLACK));
+            int currentValue = minimax(3, board, -10000, 10000, team.equals(Color.WHITE));
             itr.getPiece().undoLastMove();
 
             if (team.equals(Color.WHITE)) {
                 currentValue *= -1;
             }
 
-            if (currentValue > bestValue) {
+            if (currentValue >= bestValue) {
                 bestValue = currentValue;
                 bestMove = itr;
             }
@@ -52,7 +52,9 @@ public class AiPlayer {
             cellsAvailable.addAll(itr.getCellsToAttack(board));
             moves.addAll(cellsAvailable.stream().map(cell -> (new Move(itr, cell))).toList());
         }
-        return moves.stream().filter(move -> move.getPiece().verifyMove(move.getCellToMove(), board)).toList();
+        Collections.shuffle(moves);
+        moves = moves.stream().filter(move -> move.getPiece().verifyMove(move.getCellToMove(), board)).toList();
+        return moves;
     }
 
     private int minimax(int depth, Board board, int alpha, int beta, boolean isMaxPlayer) {
@@ -68,6 +70,10 @@ public class AiPlayer {
                 bestValue = Math.max(bestValue, minimax(depth - 1, board, alpha, beta, !isMaxPlayer));
                 itr.getPiece().undoLastMove();
 
+                alpha = Math.max(alpha, bestValue);
+                if (beta <= alpha) {
+                    return bestValue;
+                }
             }
             return bestValue;
         } else {
@@ -76,6 +82,11 @@ public class AiPlayer {
                 itr.getPiece().moveTo(itr.getCellToMove(), board);
                 bestValue = Math.min(bestValue, minimax(depth - 1, board, alpha, beta, !isMaxPlayer));
                 itr.getPiece().undoLastMove();
+
+                beta = Math.min(beta, bestValue);
+                if (beta <= alpha) {
+                    return bestValue;
+                }
             }
             return bestValue;
         }
